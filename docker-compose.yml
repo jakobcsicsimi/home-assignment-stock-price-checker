@@ -11,11 +11,9 @@ services:
       - '3000:3000'
     depends_on:
       - db
+    command: sh -c "pnpm exec prisma migrate deploy && pnpm run start:prod"
     env_file:
       - .env
-    volumes:
-      - ./:/app
-      - /app/node_modules
 
   db:
     image: postgres:17-alpine
