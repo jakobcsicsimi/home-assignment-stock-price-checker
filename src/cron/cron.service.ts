@@ -7,11 +7,15 @@ export class CronService {
 
   constructor() {}
 
-  startJob(
-    name: string,
-    schedule: string,
-    callback: () => void | Promise<void>,
-  ) {
+  startJob({
+    name,
+    schedule,
+    callback,
+  }: {
+    name: string;
+    schedule: string;
+    callback: () => void | Promise<void>;
+  }) {
     // early return to avoid multiple jobs for the same key (name)
     if (this.tasks.has(name)) {
       console.log(`Job ${name} already running`);
