@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client"
+  output          = "./generated"
+  moduleFormat  = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Stock {
+  symbol String   @id
+  price  Float
+  date   DateTime
+}
