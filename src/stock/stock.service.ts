@@ -1,5 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
-
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, Stock } from 'prisma/generated/client';
 import { PgPrismaClient } from 'prisma/prisma.service';
 import { CONFIG } from 'src/config/config.const';
@@ -32,6 +31,12 @@ export class StockService {
     // get records from "Stock" table
     const stockRecords = await this.prisma.$queryRaw<Stock[]>(query);
 
+    if (!stockRecords.length) {
+      throw new NotFoundException(
+        `No records found for this symbol: ${symbol}`,
+      );
+    }
+
     // format and return data
     const lastStockRecord = stockRecords[0];
 
@@ -54,7 +59,9 @@ export class StockService {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch stock information from Finnhub');
+        throw new NotFoundException(
+          'Failed to fetch stock information from Finnhub',
+        );
       }
 
       const data = (await response.json()) as unknown;
@@ -63,7 +70,7 @@ export class StockService {
 
       await this.prisma.$executeRaw`
         INSERT INTO "Stock" (symbol, price, date) 
-        VALUES (${symbol}, ${stock.c}, ${new Date(stock.t)})
+        VALUES (${symbol}, ${stock.c}, ${new Date(stock.t * 1000)})
       `;
     };
 

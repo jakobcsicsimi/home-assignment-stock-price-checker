@@ -13,7 +13,7 @@ export const stockQuoteResponseSchema = z.object({
   // previous close price
   //   pc: z.number(),
 
-  // time
+  // timestamp (epoch)
   t: z.number(),
 });
 

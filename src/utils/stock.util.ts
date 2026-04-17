@@ -5,8 +5,16 @@ export const calculateStockPriceAverage = ({
 }: {
   stockRecords: Stock[];
 }) => {
-  return stockRecords.reduce(
+  if (!stockRecords.length) {
+    return 0;
+  }
+
+  const sum = stockRecords.reduce(
     (accumulatedAverage, record) => accumulatedAverage + record.price,
     0,
   );
+
+  const rounded = Math.round((sum / stockRecords.length) * 100) / 100;
+
+  return rounded;
 };
