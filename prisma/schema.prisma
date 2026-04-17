@@ -9,7 +9,10 @@ datasource db {
 }
 
 model Stock {
-  symbol String   @id
+  id     Int   @id @default(autoincrement())
+  symbol String   
   price  Float
   date   DateTime
+
+  @@index([symbol, date])
 }
